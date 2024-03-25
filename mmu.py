@@ -1,8 +1,5 @@
 #matt's metadata utility : modifies file metadata (quickly!!)
 
-#https://linuxconfig.org/how-to-set-change-and-delete-music-tags-with-mutagen
-#https://stackoverflow.com/questions/71468239/function-to-write-id3-tag-with-python-3-mutagen
-
 import mutagen
 from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TCON, TDRC, TRCK, TDAT
 from mutagen.flac import FLAC
