@@ -175,7 +175,7 @@ def part_auto_edit_mp3_rename():
            
 #program home
 while True:
-    prompt = int(input('Welcome to matt\'s metadata utility, please choose one of the following to get started:\n1 to modify track metadata track by track\n2 thoroughly modify metadata track by track\n3 partially autofill metadata, then fill in song name and track# track by track\n'))
+    prompt = int(input('Welcome to matt\'s metadata utility, please choose one of the following to get started:\n1 to modify track metadata track by track\n2 thoroughly modify metadata track by track\n3 partially autofill metadata, then fill in song name and track# track by track\n0 to quit\n'))
     
 #program quit
     if prompt == 0:
