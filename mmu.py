@@ -1,25 +1,17 @@
 #matt's metadata utility : modifies file metadata (quickly!!)
 
+#BIG NOTE : only modifies mp3 files
+
 import mutagen
-from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TCON, TDRC, TRCK, TDAT
-from mutagen.flac import FLAC
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, TCOM, TCON, TDRC, TRCK
 import os
 
-router = ''
+router = os.getcwd()
 specfilemp3 = '.mp3'
-specfileflac = '.FLAC'
-
-#home folder
-while router == '':
-    router = input('\nBefore starting, please enter the exact location of the folder you are going to be editing\n')
-    if router == '':
-        continue
-    else:
-        break
 
 folder = os.listdir(router)
 
-#quick edit mp3
+#quick edit
 def quick_edit_mp3():
     length = len(folder)
     indexer = 0
@@ -42,30 +34,8 @@ def quick_edit_mp3():
            tags['TRCK'] = TRCK(encoding=3, text=trackno)
            tags.save()
            indexer += 1
-           
-#quick edit flac
-def quick_edit_flac():
-    length = len(folder)
-    indexer = 0
-    name = folder[indexer]
-    while indexer < length:
-        if name == 'mmu.py' or name[-5:].lower() != specfileflac: 
-            indexer += 1
-        if name != 'mmu.py' and name[-5:].lower() == specfileflac:
-           print(name)
-           song = FLAC(name)
-           songtitle = str(input('Enter a track title:\n'))
-           album = str(input('Enter an album title:\n'))
-           artist = str(input('Enter an artist name:\n'))
-           trackno = str(input('Enter a track number:\n'))
-           song['TITLE'] = songtitle
-           song['ALBUM'] = album
-           song['ARTIST'] = artist
-           song['TRACKNUMBER'] = trackno
-           tags.save()
-           indexer += 1
 
-#full edit mp3
+#full edit
 def full_edit_mp3():
     length = len(folder)
     indexer = 0
@@ -93,6 +63,32 @@ def full_edit_mp3():
            tags['TCOM'] = TCOM(encoding=3, text=composer)
            tags['TCON'] = TCON(encoding=3, text=genre)
            tags['TDRC'] = TDRC(encoding=3, text=year)
+           tags['TRCK'] = TRCK(encoding=3, text=trackno)
+           tags.save()
+           indexer += 1
+           
+
+#part auto edit
+def part_auto_edit_mp3():
+    length = len(folder)
+    indexer = 0
+    name = folder[indexer]
+    album = str(input('Enter an album title:\n'))
+    artist = str(input('Enter an artist name:\n'))
+    year = str(input('Enter a year:\n'))
+    while indexer < length:
+        name = folder[indexer]
+        if name == 'mmu.py' or name[-4:].lower() != specfilemp3: 
+            indexer += 1
+        if name != 'mmu.py' and name[-4:].lower() == specfilemp3:
+           print(name)
+           song = name
+           tags = ID3(song)
+           songtitle = str(input('Enter a track title:\n'))
+           trackno = str(input('Enter a track number:\n'))
+           tags['TIT2'] = TIT2(encoding=3, text=songtitle)
+           tags['TALB'] = TALB(encoding=3, text=album)
+           tags['TDRC'] = TDRC(encoding=3, text=year)
            tags['TPE1'] = TPE1(encoding=3, text=artist)
            tags['TRCK'] = TRCK(encoding=3, text=trackno)
            tags.save()
@@ -100,25 +96,25 @@ def full_edit_mp3():
            
 #program home
 while True:
-    prompt = int(input('Welcome to matt\'s metadata utility, please choose one of the following to get started:\n1 to quickly modify track metadata'))
+    prompt = int(input('Welcome to matt\'s metadata utility, please choose one of the following to get started:\n1 to modify track metadata track by track\n2 thoroughly modify metadata track by track\n3 partially autofill metadata, then fill in song name and track# track by track\n'))
     
 #program quit
     if prompt == 0:
         print('Goodbye')
         break
 
-#quick editor mp3 flac wav
+#quick editor
     elif prompt == 1:
-        chooser = int(input('Enter a file type to modify\n1 for MP3\n2 for FLAC\n3 for WAV\n'))
-        if chooser == 1:
-            quick_edit_mp3()
-        elif chooser == 2:
-            quick_edit_flac()
-        elif chooser == 3:
-            quick_edit_WAV()
-        else:
-            print('Invalid input!')
+        quick_edit_mp3()
 
 #thorough editor
-    if prompt == 2:
+    elif prompt == 2:
         full_edit_mp3()
+
+#partial auto edit
+    elif prompt == 3:
+        part_auto_edit_mp3()
+        
+#invalid input
+    else:
+        print('Invalid input!')
