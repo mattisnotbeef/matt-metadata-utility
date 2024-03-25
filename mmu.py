@@ -22,12 +22,35 @@ def quick_edit_mp3():
             indexer += 1
         if name != 'mmu.py' and name[-4:].lower() == specfilemp3:
            print(name)
-           song = name
-           tags = ID3(song)
+           tags = ID3(name)
            songtitle = str(input('Enter a track title:\n'))
            album = str(input('Enter an album title:\n'))
            artist = str(input('Enter an artist name:\n'))
            trackno = str(input('Enter a track number:\n'))
+           tags['TIT2'] = TIT2(encoding=3, text=songtitle)
+           tags['TALB'] = TALB(encoding=3, text=album)
+           tags['TPE1'] = TPE1(encoding=3, text=artist)
+           tags['TRCK'] = TRCK(encoding=3, text=trackno)
+           tags.save()
+           indexer += 1
+
+#quick edit + rename
+def quick_edit_mp3_rename():
+    length = len(folder)
+    indexer = 0
+    name = folder[indexer]
+    while indexer < length:
+        name = folder[indexer]
+        if name == 'mmu.py' or name[-4:].lower() != specfilemp3: 
+            indexer += 1
+        if name != 'mmu.py' and name[-4:].lower() == specfilemp3:
+           print(name)
+           tags = ID3(name)
+           songtitle = str(input('Enter a track title:\n'))
+           album = str(input('Enter an album title:\n'))
+           artist = str(input('Enter an artist name:\n'))
+           trackno = str(input('Enter a track number:\n'))
+           os.rename(str(name), str(songtitle) + specfilemp3)
            tags['TIT2'] = TIT2(encoding=3, text=songtitle)
            tags['TALB'] = TALB(encoding=3, text=album)
            tags['TPE1'] = TPE1(encoding=3, text=artist)
@@ -46,8 +69,7 @@ def full_edit_mp3():
             indexer += 1
         if name != 'mmu.py' and name[-4:].lower() == specfilemp3:
            print(name)
-           song = name
-           tags = ID3(song)
+           tags = ID3(name)
            songtitle = str(input('Enter a track title:\n'))
            album = str(input('Enter an album title:\n'))
            band = str(input('Enter a band\n'))
@@ -66,8 +88,39 @@ def full_edit_mp3():
            tags['TRCK'] = TRCK(encoding=3, text=trackno)
            tags.save()
            indexer += 1
-           
 
+#full edit + rename
+def full_edit_mp3():
+    length = len(folder)
+    indexer = 0
+    name = folder[indexer]
+    while indexer < length:
+        name = folder[indexer]
+        if name == 'mmu.py' or name[-4:].lower() != specfilemp3: 
+            indexer += 1
+        if name != 'mmu.py' and name[-4:].lower() == specfilemp3:
+           print(name)
+           tags = ID3(name)
+           songtitle = str(input('Enter a track title:\n'))
+           album = str(input('Enter an album title:\n'))
+           band = str(input('Enter a band\n'))
+           artist = str(input('Enter an artist name:\n'))
+           composer = str(input('Enter a composer:\n'))
+           genre  = str(input('Enter a genre:\n'))
+           year = str(input('Enter a year:\n'))
+           trackno = str(input('Enter a track number:\n'))
+           os.rename(str(name), str(songtitle) + specfilemp3)
+           tags['TIT2'] = TIT2(encoding=3, text=songtitle)
+           tags['TALB'] = TALB(encoding=3, text=album)
+           tags['TPE2'] = TPE2(encoding=3, text=band)
+           tags['TPE1'] = TPE1(encoding=3, text=artist)
+           tags['TCOM'] = TCOM(encoding=3, text=composer)
+           tags['TCON'] = TCON(encoding=3, text=genre)
+           tags['TDRC'] = TDRC(encoding=3, text=year)
+           tags['TRCK'] = TRCK(encoding=3, text=trackno)
+           tags.save()
+           indexer += 1
+           
 #part auto edit
 def part_auto_edit_mp3():
     length = len(folder)
@@ -82,8 +135,7 @@ def part_auto_edit_mp3():
             indexer += 1
         if name != 'mmu.py' and name[-4:].lower() == specfilemp3:
            print(name)
-           song = name
-           tags = ID3(song)
+           tags = ID3(name)
            songtitle = str(input('Enter a track title:\n'))
            trackno = str(input('Enter a track number:\n'))
            tags['TIT2'] = TIT2(encoding=3, text=songtitle)
@@ -105,7 +157,11 @@ while True:
 
 #quick editor
     elif prompt == 1:
-        quick_edit_mp3()
+        chooser = str(input('Rename files as well?\ny or n\n'))
+        if chooser == 'y':
+            quick_edit_mp3_rename()
+        else:
+            quick_edit_mp3()
 
 #thorough editor
     elif prompt == 2:
