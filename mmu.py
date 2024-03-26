@@ -2,6 +2,8 @@
 
 #BIG NOTE : only modifies mp3 files
 
+#before use do: pip install mutagen
+
 import mutagen
 from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, TCOM, TCON, TDRC, TRCK
 import os
